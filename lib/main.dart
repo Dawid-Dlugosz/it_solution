@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
 import 'dart:ui';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
@@ -55,11 +57,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Stack(
-          children: [],
-        ),
-      ),
+      appBar: AppBar(),
       body: Stack(
         children: [
           Padding(
@@ -135,10 +133,6 @@ class _HomePageState extends State<HomePage> {
 
     final overlay = Overlay.of(context);
 
-    // Get FAB position on screen
-    final RenderBox fabRenderBox = key.currentContext?.findRenderObject() as RenderBox;
-    final fabPosition = fabRenderBox.localToGlobal(Offset.zero);
-
     // Overlay for custom menu
     _overlayEntry = OverlayEntry(
       builder: (context) {
@@ -146,19 +140,9 @@ class _HomePageState extends State<HomePage> {
           onTap: _removeOverlay,
           child: Stack(
             children: [
-              // Baclrop filter
-              if (_isMenuOpen)
-                Positioned.fill(
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-                    child: Container(
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                  ),
-                ),
               // Menu over FAB
               Positioned(
-                top: fabPosition.dy - 70,
+                bottom: 100,
                 right: 10,
                 child: Material(
                   color: Colors.transparent,
@@ -173,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                             onPressed: () {
                               // Check browser service fullscreen
                               final html.Element? documentElement = html.document.documentElement;
-                              if (documentElement != null && documentElement.requestFullscreen != null) {
+                              if (documentElement != null) {
                                 documentElement.requestFullscreen();
                               } else {
                                 // Old borwsers
